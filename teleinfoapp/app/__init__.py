@@ -8,7 +8,6 @@ db = SQLAlchemy()
 
 # change it
 from app.charts import charts_blueprint
-from app.api import api
 from app.webapi import webapi
 
 import logging, os
@@ -29,7 +28,6 @@ def create_app():
     db.init_app(app)
     
     app.register_blueprint(charts_blueprint)
-    app.register_blueprint(api)
     app.register_blueprint(webapi)
 
     # Scss
