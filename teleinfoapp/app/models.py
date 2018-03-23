@@ -55,6 +55,7 @@ class Teleinfo(db.Model):
     iinst3 = db.Column(db.Integer)
         
     def __init__(self, timestamp, base=1, papp=1, iinst1=1, iinst2=1, iinst3=1):
+        self.timestamp = timestamp
         self.base = base
         self.papp = papp
         self.iinst1 = iinst1
@@ -75,7 +76,8 @@ class Teleinfo(db.Model):
             self.papp,
             self.iinst1,
             self.iinst2,
-            self.iinst3
+            self.iinst3,
+            self.id
        ]
 
     def papptolist(self):
@@ -85,7 +87,6 @@ class Teleinfo(db.Model):
             self.papp,
        ]
 
-    @staticmethod
     def alltolist(self):
         mylist = list()
         for entry in self.query.order_by(Teleinfo.timestamp).limit(500).all():

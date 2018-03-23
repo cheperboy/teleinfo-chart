@@ -34,7 +34,7 @@ def drop_db():
 @cli.command()
 def create_data():
     """Creates a data Entry."""
-    me = Teleinfo()
+    me = Teleinfo(datetime.now())
     db.session.add(me)
     db.session.commit()
     print me

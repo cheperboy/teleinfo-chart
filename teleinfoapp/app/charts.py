@@ -8,7 +8,7 @@ from random import random
 
 from flask import Blueprint, render_template, request, jsonify, make_response
 from app.auth import auth
-
+import config
 charts_blueprint = Blueprint("charts", __name__, url_prefix='/charts')
 static_conf = {
         "chart": { 
@@ -70,7 +70,7 @@ live_conf = {
             "renderTo": 'data-container',
             "defaultSeriesType": 'spline',
             "events": {
-                "load": 'requestData1'
+                "load": 'requestLastPapp'
             }
         },
         "title": {
@@ -101,17 +101,20 @@ opt_conf = {
         }]
 }
 
+baseURL = {'value' : config.APP_BASE_URL}
+
+@charts_blueprint.route('/')
 @charts_blueprint.route('/allchart')
 def allchart():
-    return render_template('index.html', mylivechart=True, mystaticchart=True)
+    return render_template('index.html', baseURL=baseURL, mylivechart=True, mystaticchart=True)
 
 @charts_blueprint.route('/mylivechart')
 def mylivechart():
-    return render_template('index.html', mylivechart=True)
+    return render_template('index.html', baseURL=baseURL, mylivechart=True)
 
 @charts_blueprint.route('/mystaticchart')
 def mystaticchart():
-    return render_template('index.html', mystaticchart=True)
+    return render_template('index.html', baseURL=baseURL, mystaticchart=True)
 
 @charts_blueprint.route('/livedatas')
 def livedatas():

@@ -7,18 +7,18 @@ var chart;
  * Request data from the server, add it to the graph and set a timeout
  * to request again
  */
-function requestData1(chart_name) {
-	console.log('requestData1');
+function requestLastPapp(chart_name) {
+	console.log('requestLastPapp');
     $.ajax({
-        url: 'http://localhost:5000/charts/livedatas',
+        url: JSbaseURL+'webapi/getlastpapp',
         success: function(point) {
             var series = live_chart.series[0],
                 shift = series.data.length > 50; // shift if the series is// longer than 20
-			var temp = [point[0], point[1]]
-            live_chart.series[0].addPoint(temp, true, shift);
-			console.log(temp);
+			var papp = [point[0], point[1]]
+            live_chart.series[0].addPoint(papp, true, shift);
+			console.log(papp);
             // call it again after one second
-            setTimeout(requestData1, 1000);
+            setTimeout(requestLastPapp, 1000);
         },
         cache: false
     });
@@ -27,7 +27,7 @@ function requestData1(chart_name) {
 function requestData2() {
 	console.log('requestData2');
     $.ajax({
-        url: 'http://localhost:5000/charts/livedatas',
+        url: JSbaseURL+'charts/livedatas',
         success: function(point) {
             var series = chart.series[0],
                 shift = series.data.length > 20; // shift if the series is// longer than 20
@@ -44,7 +44,7 @@ function requestData2() {
 }
 
 function requestConf(url_part){
-	var url = 'http://localhost:5000/charts/'+url_part
+	var url = JSbaseURL+ 'charts/'+url_part
 	var myoptions= $.ajax({ 
 		url: url, 
 		async: false
@@ -57,13 +57,15 @@ function requestConf(url_part){
 	return myoptions;
 }
 function requestData(){
-	var url = 'http://localhost:5000/webapi/conso_by_date/2018/03/19'
+//	var url = JSbaseURL+'webapi/conso_by_date/2018/03/19'
+	var url = JSbaseURL+'webapi/getpapp/12'
+	console.log(url);
 	var datas = $.ajax({ 
 		url: url, 
 		async: false
 	}).responseText;
 	var datas = JSON.parse(datas);
-	console.log("opt after "+ JSON.stringify(datas, null, 4));
+	console.log("DATAS "+ JSON.stringify(datas, null, 4));
 	return datas;
 }
 

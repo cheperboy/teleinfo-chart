@@ -1,9 +1,9 @@
 import os
 import sys
-basedir = os.path.abspath(os.path.dirname(__file__))
-sys.path.append(os.path.join(basedir,'app'))
-from app import db
+#basedir = os.path.abspath(os.path.dirname(__file__))
+#sys.path.append(os.path.join(basedir,'app'))
 from app.models import Teleinfo
+from app import db
 from datetime import datetime
 
 from flask import Blueprint
@@ -11,27 +11,37 @@ import json, time
 from datetime import datetime, timedelta
 from random import random
 
-from app.models import Teleinfo
-
 api = Blueprint("api", __name__, url_prefix='/api')
 
 
 def createti(timestamp, base, papp, iinst1, iinst2, iinst3):
     ret = 'NOK'
-    teleinfo = Teleinfo()
-    teleinfo.timestamp = timestamp
-    teleinfo.base = base
-    teleinfo.papp = papp
-    teleinfo.iinst1 = iinst1
-    teleinfo.iinst2 = iinst2
-    teleinfo.iinst3 = iinst3
-
+    try:
+        entry = Teleinfo(datetime.now())
+        db.session.add(entry)
+        db.session.commit()
+    except RuntimeError,e:
+        print e.message
+"""
+    teleinfo = Teleinfo(
+        timestamp,
+        1,
+        papp,
+        iinst1,
+        iinst2,
+        iinst3
+    )
     try:
         db.session.add(teleinfo)
         db.session.commit()
         ret = True
-    except exc.SQLAlchemyError as e:
-        ret = False
-    return ret
+    except: # catch *all* exceptions
+        e = sys.exc_info()[0]
+        print "Error: %s" % e
+    finally:
+        return ret
+"""
+#except exc.SQLAlchemyError as e:
+#ret = False
 
 #print createti(datetime.now(), 3, 2, 2, 2, 3)

@@ -14,11 +14,13 @@ envpath = os.path.dirname(projectpath)                   # /home/pi/Development
 envname = os.path.basename(envpath)                      # Development
 
 #logfile_base = '/home/pi/Development/teleinfo/tiscript/log/teleinfo.py'
-logfile_base = projectpath + '/log/tiscript'
+logfile_base = os.path.join(projectpath, 'log')
 
-api = projectpath + '/teleinfoapp/'
-sys.path.append(api)
-from api import createti
+teleinfoapp = os.path.join(projectpath, 'teleinfoapp')
+print teleinfoapp
+sys.path.append(teleinfoapp)
+#from app.api import createti
+from newapi import createTeleinfo
 '''
 logging.critical(os.path.basename(__file__))
 logging.error("ERROR")
@@ -34,14 +36,13 @@ def main():
     try:
         while True:
             teleinfo = readPort(EDFserial)
-            createti(
-                      datetime.datetime.now(), 
-                      teleinfo['base'],
-                      teleinfo['papp'],
-                      teleinfo['iinst1'],
-                      teleinfo['iinst2'],
-                      teleinfo['iinst3']
-                    )
+            createTeleinfo(
+                    datetime.datetime.utcnow(),
+                    teleinfo['base'],
+                    teleinfo['papp'],
+                    teleinfo['iinst1'],
+                    teleinfo['iinst2'],
+                    teleinfo['iinst3'])
     except KeyboardInterrupt:
         logger.debug('KeyboardInterrupt')
         try:
@@ -132,7 +133,7 @@ if __name__ == '__main__':
                 "class": "logging.handlers.RotatingFileHandler",
                 "level": "INFO",
                 "formatter": "simple",
-                "filename": logfile_base + "_info.log",
+                "filename": os.path.join(logfile_base, 'tiscript_info.log'),
                 "maxBytes": 100000,
                 "backupCount": 3,
                 "encoding": "utf8"
@@ -142,7 +143,7 @@ if __name__ == '__main__':
                 "class": "logging.handlers.RotatingFileHandler",
                 "level": "ERROR",
                 "formatter": "simple",
-                "filename": logfile_base + "_errors.log",
+                "filename": str(os.path.join(logfile_base, 'tiscript_error.log')),
                 "maxBytes": 100000,
                 "backupCount": 3,
                 "encoding": "utf8"
