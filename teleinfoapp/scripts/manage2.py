@@ -16,29 +16,30 @@ def create_my_app(info):
     return create_app()
 
 @click.group(cls=FlaskGroup, create_app=create_my_app)
-def cli():
+def app():
     """This is a management script for the application."""
 
-@cli.command()
+@app.command()
 def create_db():
     """Recreate the db tables."""
     db.drop_all()
     db.create_all()
     db.session.commit()
 
-@cli.command()
+@app.command()
 def drop_db():
     """Drops the db tables."""
     db.drop_all()
 
-@cli.command()
-def create_data():
+@app.command()
+@click.option('--base', default=666)
+def create_data(base):
     """Creates a data Entry."""
-    me = Teleinfo(datetime.now())
+    me = Teleinfo(datetime.now(), base=base)
     db.session.add(me)
     db.session.commit()
     print me
 
 
 if __name__ == '__main__':
-    cli()
+    app()

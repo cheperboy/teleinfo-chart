@@ -38,15 +38,20 @@ elif envname == 'Production':
     """Production configuration."""
     APP_BASE_URL = 'http://montlevic.hd.free.fr:' + str(PORT) + '/'
     BCRYPT_LOG_ROUNDS = 13
-    SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/example'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///{0}'.format(os.path.join(projectpath + '/db/', 'app.db'))
+    SQLALCHEMY_BINDS = {
+        'teleinfo':         'sqlite:///' + os.path.join(projectpath + '/db/', 'teleinfo.db'),
+        'teleinfo_minute':  'sqlite:///' + os.path.join(projectpath + '/db/', 'teleinfo_minute.db'),
+        'teleinfo_hour':    'sqlite:///' + os.path.join(projectpath + '/db/', 'teleinfo_hour.db')
+    }
     WTF_CSRF_ENABLED = True
     
 elif envname == 'flask-dev' :
     """Windows Development configuration."""
     print 'db path '+os.path.join(projectpath + '\db\\', 'teleinfo.db')
 
-    APP_BASE_URL = 'http://localhost:' + str(PORT) + '/'
     APP_NAME += ' Win Dev'
+    APP_BASE_URL = 'http://localhost:' + str(PORT) + '/'
     SQLALCHEMY_DATABASE_URI = 'sqlite:///{0}'.format(
         os.path.join(projectpath + '\db\\', 'teleinfo.db'))
 
